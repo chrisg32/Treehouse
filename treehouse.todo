@@ -1,0 +1,27 @@
+Boiler plate:
+    ☐ Create EF project
+    ☐ Authorization core
+    ✔ Radzen controls @done(20-09-15 20:41)
+Login:
+    ☐ Username & Password Login
+Dashboard:
+    ☐ See Cash Balance
+    ☐ See current jobs
+    ☐ Payday countdown
+Cash:
+    ☐ See total
+    ☐ See transaction history
+    ☐ Transfer money
+Savings:
+    ☐ Open new savings bucket
+    Savings Bucket:
+        ☐ Change name
+        ☐ See bucket balance
+        ☐ See transaction history
+        ☐ Transfer money
+        ☐ Close bucket
+Jobs:
+    ☐ See current jobs
+    ☐ See job listing
+    ☐ Apply for job
+    ☐ See paycheck list
