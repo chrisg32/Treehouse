@@ -9,9 +9,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
+using TreeHouse.Database;
 
 namespace TreeHouse.Services
 {
@@ -37,11 +39,39 @@ namespace TreeHouse.Services
 
         public async Task<bool> TryLogin(string userName, string password)
         {
+            var isValid = await CheckCredentials(userName, password);
+            if (!isValid)
+            {
+                await DeleteToken();
+                return false;
+            }
+
+            var tokenInfo = CreateToken(userName);
+            await SaveToken(tokenInfo);
+
+            return true;
+        }
+
+        private async Task DeleteToken()
+        {
+            await _jsRuntime.InvokeAsync<object>("localStorage.removeItem", "authToken");
+            await _jsRuntime.InvokeAsync<object>("localStorage.removeItem", "authTokenExpiry");
+        }
+
+        private async Task SaveToken((string token, DateTimeOffset expires) tokenInfo)
+        {
+            var (token, expires) = tokenInfo;
+            await _jsRuntime.InvokeAsync<object>("localStorage.setItem", "authToken", token);
+            await _jsRuntime.InvokeAsync<object>("localStorage.setItem", "authTokenExpiry", expires);
+        }
+
+        private (string token, DateTimeOffset expires) CreateToken(string userName)
+        {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, userName),
             };
-        
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var tokenExpiration = int.Parse(_configuration["Jwt:TokenExpiration"]);
@@ -51,10 +81,25 @@ namespace TreeHouse.Services
                 claims,
                 expires: expires.LocalDateTime,
                 signingCredentials: credentials);
-        
+
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return (tokenString, expires);
         }
 
+        private async Task<bool> CheckCredentials(string userName, string password)
+        {
+            await using var db = new TreeHouseContext(_configuration["db"]);
+            var hashedPass = HashPass(password);
+            return await db.Users.AnyAsync(u => u.FirstName.Equals(userName, StringComparison.InvariantCultureIgnoreCase) && password == hashedPass);
+        }
+
+        public static string HashPass(string text)
+        {
+            var clearBytes = Encoding.Default.GetBytes(text);
+            var hashedBytes = SHA1.Create().ComputeHash(clearBytes);
+            return Encoding.Unicode.GetString(hashedBytes);
+        }
         private async Task<string> GetTokenAsync()
         {
             var expiry = await _jsRuntime.InvokeAsync<object>("localStorage.getItem", "authTokenExpiry");

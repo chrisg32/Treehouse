@@ -1,6 +1,6 @@
 Boiler plate:
     ✔ Create EF project @done(20-09-16 08:13)
-    ☐ Authorization core
+    ✔ Authorization core @done(20-09-16 17:32)
     ✔ Radzen controls @done(20-09-15 20:41)
 Login:
     ☐ Username & Password Login
