@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Treehouse.Data
+namespace TreeHouse.Data
 {
     public class WeatherForecastService
     {

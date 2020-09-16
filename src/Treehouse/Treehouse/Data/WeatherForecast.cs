@@ -1,6 +1,6 @@
 using System;
 
-namespace Treehouse.Data
+namespace TreeHouse.Data
 {
     public class WeatherForecast
     {

@@ -1,6 +1,7 @@
 ﻿@page "/fetchdata"
 
-@using Treehouse.Data
+@using TreeHouse.Data
+@using TreeHouse.Database
 @inject WeatherForecastService ForecastService
 
 <h1>Weather forecast</h1>
@@ -42,5 +43,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+
+        using (var db = new TreeHouseContext())
+        {
+            var bla = db.Users.ToList();
+        }
     }
 }

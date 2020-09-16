@@ -10,9 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
-using Treehouse.Data;
+using TreeHouse.Data;
 
-namespace Treehouse
+namespace TreeHouse
 {
     public class Startup
     {

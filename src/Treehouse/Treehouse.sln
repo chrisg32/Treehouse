@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30330.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Treehouse", "Treehouse\Treehouse.csproj", "{AD545A80-2374-42BE-BF71-2CFE35FA9928}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeHouse", "Treehouse\TreeHouse.csproj", "{AD545A80-2374-42BE-BF71-2CFE35FA9928}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeHouse.Database", "Treehouse.Database\TreeHouse.Database.csproj", "{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{AD545A80-2374-42BE-BF71-2CFE35FA9928}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD545A80-2374-42BE-BF71-2CFE35FA9928}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD545A80-2374-42BE-BF71-2CFE35FA9928}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
