@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 
@@ -17,9 +18,12 @@ namespace TreeHouse.Services
     public class TokenAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly IJSRuntime _jsRuntime;
-        public TokenAuthenticationStateProvider(IJSRuntime jsRuntime)
+        private readonly IConfiguration _configuration;
+
+        public TokenAuthenticationStateProvider(IJSRuntime jsRuntime, IConfiguration configuration)
         {
             _jsRuntime = jsRuntime;
+            _configuration = configuration;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -31,25 +35,25 @@ namespace TreeHouse.Services
             return new AuthenticationState(new ClaimsPrincipal(identity));
         }
 
-        // public async Task<bool> TryLogin(string userName, string password)
-        // {
-        //     var claims = new List<Claim>
-        //     {
-        //         new Claim(ClaimTypes.Name, userName),
-        //     };
-        //
-        //     var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
-        //     var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        //     var tokenExpiration = int.Parse(Configuration["Jwt:TokenExpiration"]);
-        //     var expires = DateTimeOffset.Now.AddMinutes(tokenExpiration);
-        //     var token = new JwtSecurityToken(Configuration["Jwt:Issuer"],
-        //         Configuration["Jwt:Issuer"],
-        //         claims,
-        //         expires: expires.LocalDateTime,
-        //         signingCredentials: credentials);
-        //
-        //     var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-        // }
+        public async Task<bool> TryLogin(string userName, string password)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userName),
+            };
+        
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var tokenExpiration = int.Parse(_configuration["Jwt:TokenExpiration"]);
+            var expires = DateTimeOffset.Now.AddMinutes(tokenExpiration);
+            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+                _configuration["Jwt:Issuer"],
+                claims,
+                expires: expires.LocalDateTime,
+                signingCredentials: credentials);
+        
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+        }
 
         private async Task<string> GetTokenAsync()
         {
