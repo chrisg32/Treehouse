@@ -9,7 +9,7 @@ using TreeHouse.Database;
 namespace TreeHouse.Database.Migrations
 {
     [DbContext(typeof(TreeHouseContext))]
-    [Migration("20200916122438_InitialCreate")]
+    [Migration("20200916134028_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace TreeHouse.Database.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Account");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("TreeHouse.Database.Models.Job", b =>
@@ -70,7 +70,7 @@ namespace TreeHouse.Database.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Job");
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("TreeHouse.Database.Models.JobComment", b =>
@@ -98,7 +98,7 @@ namespace TreeHouse.Database.Migrations
 
                     b.HasIndex("JobId");
 
-                    b.ToTable("JobComment");
+                    b.ToTable("JobComments");
                 });
 
             modelBuilder.Entity("TreeHouse.Database.Models.Transaction", b =>
@@ -134,7 +134,7 @@ namespace TreeHouse.Database.Migrations
 
                     b.HasIndex("OpposingTransactionId");
 
-                    b.ToTable("Transaction");
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("TreeHouse.Database.Models.User", b =>

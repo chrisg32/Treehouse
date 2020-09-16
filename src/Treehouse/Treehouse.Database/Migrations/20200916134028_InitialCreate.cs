@@ -24,7 +24,7 @@ namespace TreeHouse.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Account",
+                name: "Accounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -37,9 +37,9 @@ namespace TreeHouse.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Account", x => x.Id);
+                    table.PrimaryKey("PK_Accounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Account_Users_UserId",
+                        name: "FK_Accounts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -47,7 +47,7 @@ namespace TreeHouse.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Job",
+                name: "Jobs",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -59,9 +59,9 @@ namespace TreeHouse.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Job", x => x.Id);
+                    table.PrimaryKey("PK_Jobs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Job_Users_UserId",
+                        name: "FK_Jobs_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -69,7 +69,7 @@ namespace TreeHouse.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transaction",
+                name: "Transactions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -83,29 +83,29 @@ namespace TreeHouse.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transaction", x => x.Id);
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transaction_Account_AccountId",
+                        name: "FK_Transactions_Accounts_AccountId",
                         column: x => x.AccountId,
-                        principalTable: "Account",
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transaction_Users_CreatedById",
+                        name: "FK_Transactions_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transaction_Transaction_OpposingTransactionId",
+                        name: "FK_Transactions_Transactions_OpposingTransactionId",
                         column: x => x.OpposingTransactionId,
-                        principalTable: "Transaction",
+                        principalTable: "Transactions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobComment",
+                name: "JobComments",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -117,70 +117,70 @@ namespace TreeHouse.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobComment", x => x.Id);
+                    table.PrimaryKey("PK_JobComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_JobComment_Users_CreatedById",
+                        name: "FK_JobComments_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_JobComment_Job_JobId",
+                        name: "FK_JobComments_Jobs_JobId",
                         column: x => x.JobId,
-                        principalTable: "Job",
+                        principalTable: "Jobs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Account_UserId",
-                table: "Account",
+                name: "IX_Accounts_UserId",
+                table: "Accounts",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Job_UserId",
-                table: "Job",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobComment_CreatedById",
-                table: "JobComment",
+                name: "IX_JobComments_CreatedById",
+                table: "JobComments",
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobComment_JobId",
-                table: "JobComment",
+                name: "IX_JobComments_JobId",
+                table: "JobComments",
                 column: "JobId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_AccountId",
-                table: "Transaction",
+                name: "IX_Jobs_UserId",
+                table: "Jobs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_AccountId",
+                table: "Transactions",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_CreatedById",
-                table: "Transaction",
+                name: "IX_Transactions_CreatedById",
+                table: "Transactions",
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_OpposingTransactionId",
-                table: "Transaction",
+                name: "IX_Transactions_OpposingTransactionId",
+                table: "Transactions",
                 column: "OpposingTransactionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "JobComment");
+                name: "JobComments");
 
             migrationBuilder.DropTable(
-                name: "Transaction");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Job");
+                name: "Jobs");
 
             migrationBuilder.DropTable(
-                name: "Account");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Users");
