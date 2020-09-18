@@ -49,6 +49,8 @@ namespace TreeHouse.Services
             var tokenInfo = CreateToken(userName);
             await SaveToken(tokenInfo);
 
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+
             return true;
         }
 
@@ -91,7 +93,7 @@ namespace TreeHouse.Services
         {
             await using var db = new TreeHouseContext(_configuration["db"]);
             var hashedPass = HashPass(password);
-            return await db.Users.AnyAsync(u => u.FirstName.Equals(userName, StringComparison.InvariantCultureIgnoreCase) && password == hashedPass);
+            return (await db.Users.ToListAsync()).Any(u => u.FirstName.Equals(userName, StringComparison.InvariantCultureIgnoreCase) && u.Password.Equals(hashedPass));
         }
 
         public static string HashPass(string text)
@@ -141,6 +143,12 @@ namespace TreeHouse.Services
                 case 3: base64 += "="; break;
             }
             return Convert.FromBase64String(base64);
+        }
+
+        public async Task Logout()
+        {
+            await DeleteToken();
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
     }
 }

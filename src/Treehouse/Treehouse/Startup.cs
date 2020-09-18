@@ -1,3 +1,4 @@
+using BlazorStrap;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,8 @@ namespace TreeHouse
             //we do registration this way so the same instance will be resolved for either the abstract or implementation types
             services.AddScoped<TokenAuthenticationStateProvider>();
             services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<TokenAuthenticationStateProvider>());
+
+            services.AddBootstrapCss();
 
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();

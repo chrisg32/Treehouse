@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using TreeHouse.Services
+@inherits LayoutComponentBase
+@inject TokenAuthenticationStateProvider AuthProvider;
 
 <AuthorizeView>
     <Authorized>
@@ -8,7 +10,7 @@
 
         <div class="main">
             <div class="top-row px-4">
-                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                <BSButton IsOutline="true" Color="Color.Dark" OnClick="@(Logout)">Logout</BSButton>
             </div>
 
             <div class="content px-4">
@@ -17,6 +19,27 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        Go away!
+        <div class="container-fluid">
+            <div class="row justify-content-center p-4">
+                <div class="col" style="max-width: 600px">
+                    <RadzenCard>
+                        <RadzenLogin AllowRegister="false" AllowResetPassword="false" Login="@(Login)" Style="margin-bottom: 20px;"/>
+                    </RadzenCard>
+                </div>
+            </div>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
+
+@code{
+
+    private async Task Login(LoginArgs args)
+    {
+        await AuthProvider.TryLogin(args.Username, args.Password);
+    }
+
+    private async Task Logout()
+    {
+        await AuthProvider.Logout();
+    }
+}
