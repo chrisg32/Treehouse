@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using BlazorStrap;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
 using TreeHouse.Services;
+using TreeHouse.ViewModels;
 
 namespace TreeHouse
 {
@@ -25,7 +28,7 @@ namespace TreeHouse
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddAuthorizationCore();
+            services.AddAuthorizationCore(Policies.Configure);
 
             //we do registration this way so the same instance will be resolved for either the abstract or implementation types
             services.AddScoped<TokenAuthenticationStateProvider>();
@@ -36,6 +39,10 @@ namespace TreeHouse
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();
+
+            services.AddScoped<DbService>();
+
+            services.AddScoped<AdminAccountsOverviewViewModel>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

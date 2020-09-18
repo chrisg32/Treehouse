@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
-using TreeHouse.Database;
+using TreeHouse.Database.Models;
 
 namespace TreeHouse.Services
 {
@@ -21,11 +20,13 @@ namespace TreeHouse.Services
     {
         private readonly IJSRuntime _jsRuntime;
         private readonly IConfiguration _configuration;
+        private readonly DbService _dbService;
 
-        public TokenAuthenticationStateProvider(IJSRuntime jsRuntime, IConfiguration configuration)
+        public TokenAuthenticationStateProvider(IJSRuntime jsRuntime, IConfiguration configuration, DbService dbService)
         {
             _jsRuntime = jsRuntime;
             _configuration = configuration;
+            _dbService = dbService;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -39,14 +40,14 @@ namespace TreeHouse.Services
 
         public async Task<bool> TryLogin(string userName, string password)
         {
-            var isValid = await CheckCredentials(userName, password);
-            if (!isValid)
+            var user = await CheckCredentials(userName, password);
+            if (user == null)
             {
                 await DeleteToken();
                 return false;
             }
 
-            var tokenInfo = CreateToken(userName);
+            var tokenInfo = CreateToken(user);
             await SaveToken(tokenInfo);
 
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
@@ -67,11 +68,14 @@ namespace TreeHouse.Services
             await _jsRuntime.InvokeAsync<object>("localStorage.setItem", "authTokenExpiry", expires);
         }
 
-        private (string token, DateTimeOffset expires) CreateToken(string userName)
+        private (string token, DateTimeOffset expires) CreateToken(User user)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userName),
+                new Claim(Claims.FirstName, user.FirstName),
+                new Claim(Claims.LastName, user.LastName),
+                new Claim(Claims.IsParent, user.IsParent.ToString()),
+                new Claim(Claims.UserId, user.Id.ToString()),
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -89,14 +93,14 @@ namespace TreeHouse.Services
             return (tokenString, expires);
         }
 
-        private async Task<bool> CheckCredentials(string userName, string password)
+        private async Task<User> CheckCredentials(string userName, string password)
         {
-            await using var db = new TreeHouseContext(_configuration["db"]);
+            await using var db = _dbService.CreateConnection();
             var hashedPass = HashPass(password);
-            return (await db.Users.ToListAsync()).Any(u => u.FirstName.Equals(userName, StringComparison.InvariantCultureIgnoreCase) && u.Password.Equals(hashedPass));
+            return (await db.Users.ToListAsync()).FirstOrDefault(u => u.FirstName.Equals(userName, StringComparison.InvariantCultureIgnoreCase) && u.Password.Equals(hashedPass));
         }
 
-        public static string HashPass(string text)
+        private static string HashPass(string text)
         {
             var clearBytes = Encoding.Default.GetBytes(text);
             var hashedBytes = SHA1.Create().ComputeHash(clearBytes);
@@ -150,5 +154,13 @@ namespace TreeHouse.Services
             await DeleteToken();
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
+    }
+
+    public static class Claims
+    {
+        public static string FirstName => ClaimTypes.Name;
+        public static string LastName => "LastName";
+        public static string IsParent => "IsParent";
+        public static string UserId => "UserId";
     }
 }

@@ -1,0 +1,28 @@
+﻿@using TreeHouse.ViewModels
+@inject AdminAccountsOverviewViewModel ViewModel
+
+<RadzenTabs>
+    <Tabs>
+        @if (ViewModel.Users != null)
+        {
+            @foreach (var user in ViewModel.Users)
+            {
+                <RadzenTabsItem Text="@user.FirstName">
+                    <UserAccountsOverview IsCash="@IsCash" UserId="@user.Id"/>
+                </RadzenTabsItem>
+            }
+        }
+    </Tabs>
+</RadzenTabs>
+
+
+    @code {
+        [Parameter]
+        public bool IsCash { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await ViewModel.LoadAsync();
+        }
+
+    }

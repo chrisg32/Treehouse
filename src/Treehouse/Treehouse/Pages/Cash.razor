@@ -1,0 +1,11 @@
+﻿@page "/cash"
+@using TreeHouse.Services
+
+<AuthorizeView Policy="@Policies.IsAdmin">
+    <Authorized>
+        <AdminAccountsOverview IsCash="true" />
+    </Authorized>
+    <NotAuthorized>
+        <UserAccountsOverview IsCash="true" UserId="0" />
+    </NotAuthorized>
+</AuthorizeView>
