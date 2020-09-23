@@ -1,8 +1,23 @@
 ﻿@using TreeHouse.ViewModels
+@using TreeHouse.Database.Models;
 
 <h3>@ViewModel.Name</h3>
 
 <h4>Balance: @ViewModel.Balance</h4>
+
+<RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="10"
+            AllowSorting="true" Data="@ViewModel.Transactions" TItem="Transaction" ColumnWidth="200px">
+    <Columns>
+        <RadzenGridColumn TItem="Transaction" Property="Id" Title="Transaction ID" />
+        <RadzenGridColumn TItem="Transaction" Property="Description" Title="Description" />
+        <RadzenGridColumn TItem="Transaction" Property="Timestamp" Title="Timestamp"/>
+        <RadzenGridColumn TItem="Transaction" Property="Amount" Title="Amount">
+            <Template Context="data">
+                @string.Format("{0:C}", data.Amount)
+            </Template>
+        </RadzenGridColumn>
+    </Columns>
+</RadzenGrid>
 
 @code {
     [Parameter]

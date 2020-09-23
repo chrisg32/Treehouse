@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +27,7 @@ namespace TreeHouse.ViewModels
             foreach (var account in accounts)
             {
                 var accountId = account.Id;
-                account.Balance = (await connection.Transactions.Where(t => t.AccountId == accountId).ToListAsync()).Sum(t => t.Amount);
+                account.Transactions = await connection.Transactions.Where(t => t.AccountId == accountId).OrderByDescending(t => t.Timestamp).ToListAsync();
             }
 
             Accounts = accounts;
