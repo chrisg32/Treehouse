@@ -42,7 +42,8 @@ namespace TreeHouse
 
             services.AddScoped<DbService>();
 
-            services.AddScoped<AdminAccountsOverviewViewModel>();
+            services.AddTransient<AdminAccountsOverviewViewModel>();
+            services.AddTransient<UserAccountsOverviewViewModel>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

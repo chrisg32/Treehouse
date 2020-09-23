@@ -1,0 +1,10 @@
+﻿@using TreeHouse.ViewModels
+
+<h3>@ViewModel.Name</h3>
+
+<h4>Balance: @ViewModel.Balance</h4>
+
+@code {
+    [Parameter]
+    public AccountViewModel ViewModel { get; set; }
+}

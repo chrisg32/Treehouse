@@ -1,6 +1,36 @@
-﻿<h3>SingleAccountView</h3>
+﻿@using TreeHouse.ViewModels
+@inject UserAccountsOverviewViewModel ViewModel
 
+@if (IsCash)
+{
+    @if (ViewModel.Accounts != null)
+    {
+        <AccountView ViewModel="@ViewModel.Accounts[0]" />
+    }
+}
+else
+{
+    <RadzenTabs>
+        <Tabs>
+            @if (ViewModel.Accounts != null)
+            {
+                @foreach (var account in ViewModel.Accounts)
+                {
+                    <RadzenTabsItem Text="@account.Name">
+                        <AccountView ViewModel="@account" />
+                    </RadzenTabsItem>
+                }
+            }
+        </Tabs>
+    </RadzenTabs>
+}
 @code {
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await ViewModel.LoadAsync(UserId, IsCash);
+    }
+
     [Parameter]
     public bool IsCash { get; set; }
 

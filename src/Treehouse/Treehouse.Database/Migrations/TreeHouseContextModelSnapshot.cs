@@ -51,8 +51,8 @@ namespace TreeHouse.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -108,8 +108,8 @@ namespace TreeHouse.Database.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CreatedById")
                         .HasColumnType("INTEGER");

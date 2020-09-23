@@ -9,7 +9,7 @@ using TreeHouse.Database;
 namespace TreeHouse.Database.Migrations
 {
     [DbContext(typeof(TreeHouseContext))]
-    [Migration("20200916134028_InitialCreate")]
+    [Migration("20200923124116_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,8 +53,8 @@ namespace TreeHouse.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -110,8 +110,8 @@ namespace TreeHouse.Database.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CreatedById")
                         .HasColumnType("INTEGER");

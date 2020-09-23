@@ -54,7 +54,7 @@ namespace TreeHouse.Database.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Amount = table.Column<double>(nullable: true),
+                    Amount = table.Column<decimal>(nullable: true),
                     UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -75,7 +75,7 @@ namespace TreeHouse.Database.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Description = table.Column<string>(nullable: false),
-                    Amount = table.Column<double>(nullable: false),
+                    Amount = table.Column<decimal>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     AccountId = table.Column<int>(nullable: false),
                     OpposingTransactionId = table.Column<int>(nullable: true),
