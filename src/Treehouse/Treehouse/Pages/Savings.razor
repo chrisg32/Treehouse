@@ -1,9 +1,11 @@
 ﻿@page "/savings"
+@using TreeHouse.Services
 
-
-<h1>Savings</h1>
-
-
-@code {
-    
-}
+<AuthorizeView Policy="@Policies.IsAdmin">
+    <Authorized>
+        <AdminAccountsOverview IsCash="false" />
+    </Authorized>
+    <NotAuthorized>
+        <UserAccountsOverview IsCash="false" UserId="0" />
+    </NotAuthorized>
+</AuthorizeView>

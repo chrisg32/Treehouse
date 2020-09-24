@@ -22,7 +22,11 @@ namespace TreeHouse.ViewModels
             {
                 Id = a.Id,
                 Name = a.Name
-            }).ToList();
+            })
+                .OrderByDescending(a => a.Name == "Long Term Savings")
+                .ThenByDescending(a => a.Name == "Tithe")
+                .ThenBy(a => a.Name)
+                .ToList();
 
             foreach (var account in accounts)
             {

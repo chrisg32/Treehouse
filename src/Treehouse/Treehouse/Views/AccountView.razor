@@ -1,16 +1,40 @@
 ﻿@using TreeHouse.ViewModels
 @using TreeHouse.Database.Models;
+@using TreeHouse.Services
 
-<h3>@ViewModel.Name</h3>
-
-<h4>Balance: @ViewModel.Balance</h4>
+<BSContainer IsFluid="true">
+    <BSRow>
+        <BSCol MD="auto">
+            <h3>@ViewModel.Name</h3>
+            <h4>Balance: @($"{ViewModel.Balance:C}")</h4>
+        </BSCol>
+        <BSCol></BSCol>
+        <BSCol MD="auto">
+            <BSButton Color="Color.Primary">Transfer</BSButton>
+        </BSCol>
+        <AuthorizeView Policy="@Policies.IsAdmin">
+            <Authorized>
+                <BSCol MD="auto">
+                    <BSButton Color="Color.Success">Payment</BSButton>
+                </BSCol>
+                <BSCol MD="auto">
+                    <BSButton Color="Color.Danger">Charge</BSButton>
+                </BSCol>
+            </Authorized>
+        </AuthorizeView>
+    </BSRow>
+</BSContainer>
 
 <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="10"
             AllowSorting="true" Data="@ViewModel.Transactions" TItem="Transaction" ColumnWidth="200px">
     <Columns>
         <RadzenGridColumn TItem="Transaction" Property="Id" Title="Transaction ID" />
         <RadzenGridColumn TItem="Transaction" Property="Description" Title="Description" />
-        <RadzenGridColumn TItem="Transaction" Property="Timestamp" Title="Timestamp"/>
+        <RadzenGridColumn TItem="Transaction" Property="Timestamp" Title="Date">
+            <Template Context="data">
+                @string.Format("{0:d}", data.Timestamp)
+            </Template>
+        </RadzenGridColumn>
         <RadzenGridColumn TItem="Transaction" Property="Amount" Title="Amount">
             <Template Context="data">
                 @string.Format("{0:C}", data.Amount)
