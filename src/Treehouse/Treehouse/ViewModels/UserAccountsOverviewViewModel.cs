@@ -17,11 +17,13 @@ namespace TreeHouse.ViewModels
         {
             await using var connection = CreateConnection();
             var query = await connection.Accounts.Where(a => a.Cash == isCash && a.UserId == userId).ToListAsync();
+            var user = await connection.Users.FirstAsync(u => u.Id == userId);
 
             var accounts = query.Select(a => new AccountViewModel
             {
                 Id = a.Id,
-                Name = a.Name
+                Name = a.Name,
+                AccountOwnerName = user.FirstName
             })
                 .OrderByDescending(a => a.Name == "Long Term Savings")
                 .ThenByDescending(a => a.Name == "Tithe")

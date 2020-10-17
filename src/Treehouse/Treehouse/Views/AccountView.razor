@@ -1,5 +1,5 @@
 ﻿@using TreeHouse.ViewModels
-@using TreeHouse.Database.Models;
+@using TreeHouse.Database.Models
 @using TreeHouse.Services
 
 <BSContainer IsFluid="true">
@@ -9,16 +9,58 @@
             <h4>Balance: @($"{ViewModel.Balance:C}")</h4>
         </BSCol>
         <BSCol></BSCol>
-        <BSCol MD="auto">
-            <BSButton Color="Color.Primary">Transfer</BSButton>
-        </BSCol>
+        @* <BSCol MD="auto"> *@
+        @*     <BSButton Color="Color.Primary">Transfer</BSButton> *@
+        @* </BSCol> *@
         <AuthorizeView Policy="@Policies.IsAdmin">
             <Authorized>
                 <BSCol MD="auto">
-                    <BSButton Color="Color.Success">Payment</BSButton>
+                    <BSButton OnClick="@(() => PaymentModal.Show())" Color="Color.Success">Payment</BSButton>
+                    <BSModal @ref="PaymentModal" IsCentered="true" IgnoreClickOnBackdrop="true">
+                        <BSModalHeader OnClick="@(() => PaymentModal.Hide())">Payment to @ViewModel.AccountOwnerName's @ViewModel.Name account</BSModalHeader>
+                        <BSModalBody>
+                            <BSContainer>
+                                <BSRow>
+                                    <BSCol>
+                                        $<RadzenNumeric TValue="double" Placeholder="0.0" Step="1" Min="0" @bind-Value="@ViewModel.Payment" />
+                                    </BSCol>
+                                </BSRow>
+                                <BSRow Class="mt-4">
+                                    <BSCol>
+                                        <RadzenTextBox Placeholder="Description..." Style="width: 100%"/>
+                                    </BSCol>
+                                </BSRow>
+                            </BSContainer>
+                        </BSModalBody>
+                        <BSModalFooter>
+                            <BSButton Color="Color.Success" OnClick="@(async () => await @ViewModel.SubmitPayment())">Add Payment</BSButton>
+                            <BSButton OnClick="@(() => PaymentModal.Hide())" Color="Color.Secondary">Cancel</BSButton>
+                        </BSModalFooter>
+                    </BSModal>
                 </BSCol>
                 <BSCol MD="auto">
-                    <BSButton Color="Color.Danger">Charge</BSButton>
+                    <BSButton OnClick="@(() => ChargeModal.Show())" Color="Color.Danger">Charge</BSButton>
+                    <BSModal @ref="ChargeModal" IsCentered="true" IgnoreClickOnBackdrop="true">
+                        <BSModalHeader OnClick="@(() => ChargeModal.Hide())">Charge to @ViewModel.AccountOwnerName's @ViewModel.Name account</BSModalHeader>
+                        <BSModalBody>
+                            <BSContainer>
+                                <BSRow>
+                                    <BSCol>
+                                        -$<RadzenNumeric TValue="double" Placeholder="0.0" Step="1" Min="0" @bind-Value="@ViewModel.Charge" />
+                                    </BSCol>
+                                </BSRow>
+                                <BSRow Class="mt-4">
+                                    <BSCol>
+                                        <RadzenTextBox Placeholder="Description..." Style="width: 100%"/>
+                                    </BSCol>
+                                </BSRow>
+                            </BSContainer>
+                        </BSModalBody>
+                        <BSModalFooter>
+                            <BSButton Color="Color.Danger" OnClick="@(async () => await @ViewModel.SubmitCharge())">Add Charge</BSButton>
+                            <BSButton OnClick="@(() => ChargeModal.Hide())" Color="Color.Secondary">Cancel</BSButton>
+                        </BSModalFooter>
+                    </BSModal>
                 </BSCol>
             </Authorized>
         </AuthorizeView>
@@ -44,6 +86,10 @@
 </RadzenGrid>
 
 @code {
+
+    BSModal PaymentModal { get; set; }
+    BSModal ChargeModal { get; set; }
+
     [Parameter]
     public AccountViewModel ViewModel { get; set; }
 }
