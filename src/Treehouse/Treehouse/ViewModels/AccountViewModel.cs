@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TreeHouse.Database.Models;
+using TreeHouse.Services;
 
 namespace TreeHouse.ViewModels
 {
-    public class AccountViewModel
+    public class AccountViewModel : ViewModelBase
     {
-        private double _payment;
-        private double _charge;
+        public AccountViewModel(DbService dbService) : base(dbService)
+        {
+        }
+
+        private decimal _payment;
+        private decimal _charge;
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Balance => Transactions?.Any() == true ? Transactions.Sum(t => t.Amount) : default;
         public List<Transaction> Transactions { get; set; }
-        public string AccountOwnerName { get; set; }
+        public User User { get; set; }
 
-        public double Payment
+        public decimal Payment
         {
             get => _payment;
             set
@@ -26,7 +31,7 @@ namespace TreeHouse.ViewModels
             }
         }
 
-        public double Charge
+        public decimal Charge
         {
             get => _charge;
             set
@@ -36,14 +41,46 @@ namespace TreeHouse.ViewModels
             }
         }
 
+        public string PaymentDescription { get; set; }
+        public string ChargeDescription { get; set; }
+
         public async Task SubmitPayment()
         {
-            
+            var tran = new Transaction
+            {
+                Amount = Payment,
+                AccountId = Id,
+                Timestamp = DateTime.Now,
+                Description = PaymentDescription,
+                CreatedById = User.Id
+            };
+
+            await SaveTransactionAsync(tran);
         }
 
         public async Task SubmitCharge()
         {
+            var tran = new Transaction
+            {
+                Amount = Charge,
+                AccountId = Id,
+                Timestamp = DateTime.Now,
+                Description = ChargeDescription,
+                CreatedById = User.Id
+            };
 
+            await SaveTransactionAsync(tran);
         }
+
+        private async Task SaveTransactionAsync(Transaction tran)
+        {
+            await using var connection = CreateConnection();
+
+            var savedTran = await connection.Transactions.AddAsync(tran);
+            await connection.SaveChangesAsync();
+
+            Transactions.Insert(0, savedTran.Entity);
+        }
+
     }
 }

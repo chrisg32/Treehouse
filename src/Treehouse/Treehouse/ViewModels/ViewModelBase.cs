@@ -5,7 +5,7 @@ namespace TreeHouse.ViewModels
 {
     public abstract class ViewModelBase
     {
-        private readonly DbService _dbService;
+        protected readonly DbService _dbService;
 
         protected ViewModelBase(DbService dbService)
         {
