@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 using TreeHouse.Database.Models;
+using TreeHouse.Database.Utility;
 
 namespace TreeHouse.Services
 {
@@ -96,16 +97,10 @@ namespace TreeHouse.Services
         private async Task<User> CheckCredentials(string userName, string password)
         {
             await using var db = _dbService.CreateConnection();
-            var hashedPass = HashPass(password);
+            var hashedPass = PasswordHasher.HashPass(password);
             return (await db.Users.ToListAsync()).FirstOrDefault(u => u.FirstName.Equals(userName, StringComparison.InvariantCultureIgnoreCase) && u.Password.Equals(hashedPass));
         }
 
-        private static string HashPass(string text)
-        {
-            var clearBytes = Encoding.Default.GetBytes(text);
-            var hashedBytes = SHA1.Create().ComputeHash(clearBytes);
-            return Encoding.Unicode.GetString(hashedBytes);
-        }
         private async Task<string> GetTokenAsync()
         {
             var expiry = await _jsRuntime.InvokeAsync<object>("localStorage.getItem", "authTokenExpiry");

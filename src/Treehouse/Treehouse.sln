@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeHouse", "Treehouse\Tree
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeHouse.Database", "Treehouse.Database\TreeHouse.Database.csproj", "{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreehouseDatabaseCLI", "TreehouseDatabaseCLI\TreehouseDatabaseCLI.csproj", "{C052C9C8-BE56-4103-A366-045480D2205D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E72EDF6-2750-4D9B-AD58-4DD763EE04DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C052C9C8-BE56-4103-A366-045480D2205D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C052C9C8-BE56-4103-A366-045480D2205D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C052C9C8-BE56-4103-A366-045480D2205D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C052C9C8-BE56-4103-A366-045480D2205D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

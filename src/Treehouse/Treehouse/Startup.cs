@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Security.Claims;
 using BlazorStrap;
 using Microsoft.AspNetCore.Authorization;
@@ -50,6 +51,17 @@ namespace TreeHouse
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var cultureInfo = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+            //https://www.codeproject.com/Articles/5269965/Deploying-Blazor-Server-side-to-the-Linux-Distro-U#_articleTop
+            //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -61,17 +73,10 @@ namespace TreeHouse
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            //https://www.codeproject.com/Articles/5269965/Deploying-Blazor-Server-side-to-the-Linux-Distro-U#_articleTop
-            //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
 
             app.UseEndpoints(endpoints =>
             {
