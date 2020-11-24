@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TreeHouse.Database.Models;
@@ -18,7 +19,7 @@ namespace TreeHouse.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Balance => Transactions?.Any() == true ? Transactions.Sum(t => t.Amount) : default;
-        public List<Transaction> Transactions { get; set; }
+        public ObservableCollection<Transaction> Transactions { get; set; }
         public User User { get; set; }
 
         public decimal Payment
@@ -43,6 +44,8 @@ namespace TreeHouse.ViewModels
 
         public string PaymentDescription { get; set; }
         public string ChargeDescription { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public DateTime ChargeDate { get; set; }
 
         public async Task SubmitPayment()
         {
@@ -50,7 +53,7 @@ namespace TreeHouse.ViewModels
             {
                 Amount = Payment,
                 AccountId = Id,
-                Timestamp = DateTime.Now,
+                Timestamp = DateTime.Today == PaymentDate ? DateTime.Now : PaymentDate,
                 Description = PaymentDescription,
                 CreatedById = User.Id
             };
@@ -62,9 +65,9 @@ namespace TreeHouse.ViewModels
         {
             var tran = new Transaction
             {
-                Amount = Charge,
+                Amount = -Math.Abs(Charge),
                 AccountId = Id,
-                Timestamp = DateTime.Now,
+                Timestamp = DateTime.Today == ChargeDate ? DateTime.Now : ChargeDate,
                 Description = ChargeDescription,
                 CreatedById = User.Id
             };

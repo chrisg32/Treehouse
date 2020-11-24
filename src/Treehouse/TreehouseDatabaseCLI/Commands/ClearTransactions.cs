@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TreehouseDatabaseCLI.Commands
 {
@@ -16,6 +17,13 @@ namespace TreehouseDatabaseCLI.Commands
             Console.WriteLine($"Deleting {all.Count} transactions...");
             connection.Transactions.RemoveRange(all);
             connection.SaveChanges();
+
+            var dbConnection = connection.Database.GetDbConnection();
+            dbConnection.Open();
+            using var command = dbConnection.CreateCommand();
+            command.CommandText = "UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='Transactions';";
+            command.ExecuteNonQuery();
+
             Console.WriteLine($"All transactions have been deleted.");
         }
     }

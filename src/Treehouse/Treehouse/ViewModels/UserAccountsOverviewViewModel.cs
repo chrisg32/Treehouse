@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TreeHouse.Database.Models;
 using TreeHouse.Services;
 
 namespace TreeHouse.ViewModels
@@ -33,7 +35,7 @@ namespace TreeHouse.ViewModels
             foreach (var account in accounts)
             {
                 var accountId = account.Id;
-                account.Transactions = await connection.Transactions.Where(t => t.AccountId == accountId).OrderByDescending(t => t.Timestamp).ToListAsync();
+                account.Transactions = new ObservableCollection<Transaction>(await connection.Transactions.Where(t => t.AccountId == accountId).OrderByDescending(t => t.Timestamp).ToListAsync());
             }
 
             Accounts = accounts;

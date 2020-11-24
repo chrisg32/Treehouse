@@ -15,11 +15,16 @@
         <AuthorizeView Policy="@Policies.IsAdmin">
             <Authorized>
                 <BSCol MD="auto">
-                    <BSButton OnClick="@(() => PaymentModal.Show())" Color="Color.Success">Payment</BSButton>
+                    <BSButton OnClick="@(() => { PaymentModal.Show(); ViewModel.PaymentDate = DateTime.Today; })" Color="Color.Success">Payment</BSButton>
                     <BSModal @ref="PaymentModal" IsCentered="true" IgnoreClickOnBackdrop="true">
                         <BSModalHeader OnClick="@(() => PaymentModal.Hide())">Payment to @ViewModel.User.FirstName's @ViewModel.Name account</BSModalHeader>
                         <BSModalBody>
                             <BSContainer>
+                                <BSRow>
+                                    <BSCol>
+                                        <RadzenDatePicker @bind-Value="@ViewModel.PaymentDate" Inline="true" />
+                                    </BSCol>
+                                </BSRow>
                                 <BSRow>
                                     <BSCol>
                                         $<RadzenNumeric TValue="decimal" Placeholder="0.0" Step="1" Min="0" @bind-Value="@ViewModel.Payment" />
@@ -27,7 +32,7 @@
                                 </BSRow>
                                 <BSRow Class="mt-4">
                                     <BSCol>
-                                        <RadzenTextBox Placeholder="Description..." Style="width: 100%" @bind-Value="@ViewModel.PaymentDescription"/>
+                                        <RadzenTextBox Placeholder="Description..." Style="width: 100%" @bind-Value="@ViewModel.PaymentDescription" />
                                     </BSCol>
                                 </BSRow>
                             </BSContainer>
@@ -39,11 +44,16 @@
                     </BSModal>
                 </BSCol>
                 <BSCol MD="auto">
-                    <BSButton OnClick="@(() => ChargeModal.Show())" Color="Color.Danger">Charge</BSButton>
+                    <BSButton OnClick="@(() => { ChargeModal.Show(); ViewModel.ChargeDate = DateTime.Today; })" Color="Color.Danger">Charge</BSButton>
                     <BSModal @ref="ChargeModal" IsCentered="true" IgnoreClickOnBackdrop="true">
                         <BSModalHeader OnClick="@(() => ChargeModal.Hide())">Charge to @ViewModel.User.FirstName's @ViewModel.Name account</BSModalHeader>
                         <BSModalBody>
                             <BSContainer>
+                                <BSRow>
+                                    <BSCol>
+                                        <RadzenDatePicker @bind-Value="@ViewModel.ChargeDate" Inline="true" />
+                                    </BSCol>
+                                </BSRow>
                                 <BSRow>
                                     <BSCol>
                                         -$<RadzenNumeric TValue="decimal" Placeholder="0.0" Step="1" Min="0" @bind-Value="@ViewModel.Charge" />
@@ -51,7 +61,7 @@
                                 </BSRow>
                                 <BSRow Class="mt-4">
                                     <BSCol>
-                                        <RadzenTextBox Placeholder="Description..." Style="width: 100%" @bind-Value="@ViewModel.ChargeDescription"/>
+                                        <RadzenTextBox Placeholder="Description..." Style="width: 100%" @bind-Value="@ViewModel.ChargeDescription" />
                                     </BSCol>
                                 </BSRow>
                             </BSContainer>

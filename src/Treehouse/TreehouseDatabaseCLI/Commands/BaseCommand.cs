@@ -24,8 +24,12 @@ namespace TreehouseDatabaseCLI.Commands
                 Run();
                 return 0;
             }
-            catch
+            catch(Exception e)
             {
+                var originalColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Error.WriteLine(e.Message);
+                Console.ForegroundColor = originalColor;
                 return 2;
             }
         }

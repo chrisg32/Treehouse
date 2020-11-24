@@ -2,7 +2,7 @@
   "profiles": {
     "TreehouseDatabaseCLI": {
       "commandName": "Project",
-      "commandLineArgs": "rspass -f C:\\Development\\Treehouse\\src\\Treehouse\\Treehouse\\TreeHouse.sqlite -u Taylor -pw moneyBunny123"
+      "commandLineArgs": "clearTrans -f C:\\Development\\Treehouse\\src\\Treehouse\\Treehouse\\TreeHouse.sqlite"
     }
   }
 }
