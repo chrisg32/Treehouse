@@ -36,9 +36,13 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        await ViewModel.LoadAsync(IsCash);
+        await ViewModel.LoadAsync(IsCash, UserId);
     }
 
     [Parameter]
     public bool IsCash { get; set; }
+
+    [Parameter]
+    public int UserId { get; set; } = -1;
+
 }

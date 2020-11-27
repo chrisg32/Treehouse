@@ -45,6 +45,7 @@ namespace TreeHouse.Services
             if (user == null)
             {
                 await DeleteToken();
+                await _jsRuntime.InvokeAsync<string>("console.log", $"Could not log in as {userName}, no user found");
                 return false;
             }
 
@@ -52,6 +53,8 @@ namespace TreeHouse.Services
             await SaveToken(tokenInfo);
 
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+
+            await _jsRuntime.InvokeAsync<string>("console.log", $"Successfully logged in as {userName}");
 
             return true;
         }

@@ -17,13 +17,11 @@ namespace TreeHouse.ViewModels
             _tokenAuthenticationStateProvider = tokenAuthenticationStateProvider;
         }
 
-        public async Task LoadAsync(bool isCash)
+        public async Task LoadAsync(bool isCash, int userId)
         {
             var state = await _tokenAuthenticationStateProvider.GetAuthenticationStateAsync();
 
-            int userId = 0;
-
-            if (state.User.HasClaim(c => c.Type == Claims.UserId))
+            if (userId == -1 && state.User.HasClaim(c => c.Type == Claims.UserId))
             {
                 userId = int.Parse(state.User.Claims.First(c => c.Type == Claims.UserId).Value);
             }
