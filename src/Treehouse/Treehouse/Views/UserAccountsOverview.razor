@@ -3,16 +3,20 @@
 
 @if (IsCash)
 {
-    @if (ViewModel.Accounts != null)
+    @if (ViewModel.Accounts != null && ViewModel.Accounts.Any())
     {
         <AccountView ViewModel="@ViewModel.Accounts[0]" />
+    }
+    else
+    {
+        <div>No cash Accounts!</div>
     }
 }
 else
 {
     <RadzenTabs>
         <Tabs>
-            @if (ViewModel.Accounts != null)
+            @if (ViewModel.Accounts != null && ViewModel.Accounts.Any())
             {
                 @foreach (var account in ViewModel.Accounts)
                 {
@@ -20,6 +24,10 @@ else
                         <AccountView ViewModel="@account" />
                     </RadzenTabsItem>
                 }
+            }
+            else
+            {
+                <div>No savings Accounts!</div>
             }
         </Tabs>
     </RadzenTabs>
