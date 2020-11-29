@@ -1,11 +1,12 @@
 ﻿@page "/savings"
 @using TreeHouse.Services
+@inject TokenAuthenticationStateProvider TokenAuthenticationStateProvider
 
 <AuthorizeView Policy="@Policies.IsAdmin">
     <Authorized>
         <AdminAccountsOverview IsCash="false" />
     </Authorized>
     <NotAuthorized>
-        <UserAccountsOverview IsCash="false" UserId="0" />
+        <UserAccountsOverview IsCash="false"/>
     </NotAuthorized>
 </AuthorizeView>

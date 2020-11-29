@@ -3,16 +3,20 @@
 
 @if (IsCash)
 {
-    @if (ViewModel.Accounts != null)
+    @if (ViewModel.Accounts != null && ViewModel.Accounts.Any())
     {
         <AccountView ViewModel="@ViewModel.Accounts[0]" />
+    }
+    else
+    {
+        <div>No cash Accounts!</div>
     }
 }
 else
 {
     <RadzenTabs>
         <Tabs>
-            @if (ViewModel.Accounts != null)
+            @if (ViewModel.Accounts != null && ViewModel.Accounts.Any())
             {
                 @foreach (var account in ViewModel.Accounts)
                 {
@@ -21,6 +25,10 @@ else
                     </RadzenTabsItem>
                 }
             }
+            else
+            {
+                <div>No savings Accounts!</div>
+            }
         </Tabs>
     </RadzenTabs>
 }
@@ -28,12 +36,13 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        await ViewModel.LoadAsync(UserId, IsCash);
+        await ViewModel.LoadAsync(IsCash, UserId);
     }
 
     [Parameter]
     public bool IsCash { get; set; }
 
     [Parameter]
-    public int UserId { get; set; }
+    public int UserId { get; set; } = -1;
+
 }

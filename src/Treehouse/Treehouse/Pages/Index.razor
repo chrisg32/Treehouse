@@ -1,6 +1,26 @@
 ﻿@page "/"
+@using TreeHouse.Services
+@inject TokenAuthenticationStateProvider TokenAuthenticationStateProvider
 
-<h1>Hello, world!</h1>
+<h1>Welcome to the Treehouse!</h1>
 
-Welcome to your new app.
+Logged in as @User
 
+@code
+{
+    private string User { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var state = await TokenAuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            User = $"{state.User.Claims.FirstOrDefault(c => c.Type == Claims.FirstName)?.Value} {state.User.Claims.FirstOrDefault(c => c.Type == Claims.LastName)?.Value}";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+}

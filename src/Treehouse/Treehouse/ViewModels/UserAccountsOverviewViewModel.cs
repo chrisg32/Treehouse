@@ -10,13 +10,22 @@ namespace TreeHouse.ViewModels
 {
     public class UserAccountsOverviewViewModel : ViewModelBase
     {
+        private readonly TokenAuthenticationStateProvider _tokenAuthenticationStateProvider;
         public List<AccountViewModel> Accounts { get; private set; }
-        public UserAccountsOverviewViewModel(DbService dbService) : base(dbService)
+        public UserAccountsOverviewViewModel(DbService dbService, TokenAuthenticationStateProvider tokenAuthenticationStateProvider) : base(dbService)
         {
+            _tokenAuthenticationStateProvider = tokenAuthenticationStateProvider;
         }
 
-        public async Task LoadAsync(int userId, bool isCash)
+        public async Task LoadAsync(bool isCash, int userId)
         {
+            var state = await _tokenAuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            if (userId == -1 && state.User.HasClaim(c => c.Type == Claims.UserId))
+            {
+                userId = int.Parse(state.User.Claims.First(c => c.Type == Claims.UserId).Value);
+            }
+
             await using var connection = CreateConnection();
             var query = await connection.Accounts.Where(a => a.Cash == isCash && a.UserId == userId).ToListAsync();
             var user = await connection.Users.FirstAsync(u => u.Id == userId);
